@@ -1,1 +1,2 @@
-import "./monotonic-stack";
+// import "./monotonic-stack";
+import './42';
