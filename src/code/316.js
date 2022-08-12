@@ -1,42 +1,34 @@
-const beginCodeValue = 'a'.charCodeAt(0);
 /**
  * @param {string} s
  * @return {string}
  */
 var removeDuplicateLetters = function (s) {
-  const visitedLetters = new Array(26);
-  const letterCounts = new Array(26);
-
-  for (let i = 0; i < 26; i++) {
-    visitedLetters[i] = false;
-    letterCounts[i] = 0;
-  }
+  const visitedLetters = {};
+  const letterCounts = {};
 
   for (let i = 0; i < s.length; i++) {
-    letterCounts[s.charCodeAt(i) - beginCodeValue] += 1;
+    const item = s[i];
+    letterCounts[item] = (letterCounts[item] || 0) + 1;
   }
 
   const stack = [];
   for (let i = 0; i < s.length; i++) {
-    const letterIndex = s.charCodeAt(i) - beginCodeValue;
-    if (!visitedLetters[letterIndex]) {
-      const item = s[i];
-
+    const item = s[i];
+    if (!visitedLetters[item]) {
       while (stack.length && stack[stack.length - 1] > item) {
-        const topLetterIndex = stack[stack.length - 1].charCodeAt(0) - beginCodeValue;
-        if (letterCounts[topLetterIndex] > 0) {
+        const topLetter = stack[stack.length - 1];
+        if (letterCounts[topLetter] > 0) {
           stack.pop();
-
-          visitedLetters[topLetterIndex] = false;
+          visitedLetters[topLetter] = false;
         } else {
           break;
         }
       }
 
       stack.push(item);
-      visitedLetters[letterIndex] = true;
+      visitedLetters[item] = true;
     }
-    letterCounts[letterIndex] -= 1;
+    letterCounts[item] -= 1;
   }
 
   return stack.join('');
