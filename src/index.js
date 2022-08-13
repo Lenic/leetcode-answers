@@ -14,7 +14,7 @@ const App = () => {
     const originalLog = console.log;
 
     console.log = (...args) => {
-      setList((previous) => [...previous, args.join(', ')]);
+      setList((previous) => [...previous, args.map((v) => JSON.stringify(v, null, '  ')).join(', ')]);
 
       originalLog.apply(console, args);
     };
