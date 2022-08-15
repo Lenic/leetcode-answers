@@ -34,8 +34,7 @@ var threeSumClosest = function (nums, target) {
         }
         left += 1;
       } else {
-        res = sum;
-        break;
+        return sum;
       }
     }
   }
