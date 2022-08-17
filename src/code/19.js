@@ -14,7 +14,9 @@ function ListNode(val, next) {
 var removeNthFromEnd = function (head, n) {
   if (!head) return head;
 
-  let previous = null;
+  const newHead = new ListNode(0, head);
+
+  let previous = newHead;
   let left = head;
   let right = head;
 
@@ -31,11 +33,9 @@ var removeNthFromEnd = function (head, n) {
     left = left.next;
     right = right.next;
   }
-
-  if (!previous) return head.next;
-
   previous.next = left.next;
-  return head;
+
+  return newHead.next;
 };
 
 /**
