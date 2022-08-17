@@ -4,11 +4,10 @@
  */
 var removeDuplicates = function (nums) {
   let count = 1;
-  for (let i = 0, j = 1; j < nums.length; j++) {
-    if (nums[i] !== nums[j]) {
-      nums[count] = nums[j];
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i - 1] !== nums[i]) {
+      nums[count] = nums[i];
       count += 1;
-      i = j;
     }
   }
   return count;
