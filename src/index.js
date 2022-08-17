@@ -20,7 +20,8 @@ const App = () => {
     };
 
     // import('./code');
-    import('./brix');
+    // import('./brix');
+    import('./toptal');
   }, []);
 
   return (
