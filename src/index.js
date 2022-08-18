@@ -19,9 +19,9 @@ const App = () => {
       originalLog.apply(console, args);
     };
 
-    // import('./code');
+    import('./code');
     // import('./brix');
-    import('./toptal');
+    // import('./toptal');
   }, []);
 
   return (

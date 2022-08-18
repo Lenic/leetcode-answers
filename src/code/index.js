@@ -1,1 +1,1 @@
-import './31';
+import './42-two-points';
