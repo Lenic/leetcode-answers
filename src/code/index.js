@@ -1,1 +1,1 @@
-import './209';
+import './209-prefix-sum';
