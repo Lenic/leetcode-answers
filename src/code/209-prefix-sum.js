@@ -11,7 +11,7 @@ var minSubArrayLen = function (target, nums) {
     sums[i + 1] = nums[i] + sums[i];
   }
 
-  let res = nums.length;
+  let res = Infinity;
   for (let i = 0; i < nums.length; i++) {
     const targetValue = sums[i] + target;
 
@@ -25,7 +25,7 @@ var minSubArrayLen = function (target, nums) {
     }
   }
 
-  return res;
+  return res === Infinity ? 0 : res;
 };
 
 // 2
