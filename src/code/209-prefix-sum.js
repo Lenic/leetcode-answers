@@ -1,4 +1,28 @@
 /**
+ * @param {number[]} nums
+ * @param {number} left
+ * @param {number} right
+ * @param {number} target
+ * @return {number}
+ */
+const binarySearch = (nums, left, right, target) => {
+  let mid = -1;
+
+  let begin = left;
+  let end = right;
+  while (begin < end) {
+    mid = (begin + end) >> 1;
+    if (nums[mid] >= target) {
+      end = mid;
+    } else {
+      begin = mid + 1;
+    }
+  }
+
+  return nums[begin] >= target ? begin : -1;
+};
+
+/**
  * @param {number} target
  * @param {number[]} nums
  * @return {number}
@@ -13,18 +37,12 @@ var minSubArrayLen = function (target, nums) {
 
   let res = Infinity;
   for (let i = 0; i < nums.length; i++) {
-    const targetValue = sums[i] + target;
-
-    for (let j = i; j < nums.length; j++) {
-      if (sums[j + 1] >= targetValue) {
-        res = Math.min(res, j - i + 1);
-
-        if (res === 1) return res;
-        break;
-      }
+    const index = binarySearch(sums, i, nums.length, sums[i] + target);
+    if (index !== -1) {
+      res = Math.min(res, index - i);
+      if (res === 1) return res;
     }
   }
-
   return res === Infinity ? 0 : res;
 };
 
