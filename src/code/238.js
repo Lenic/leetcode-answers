@@ -3,8 +3,6 @@
  * @return {number[]}
  */
 var productExceptSelf = function (nums) {
-  if (nums.length === 2) return [nums[1], nums[0]];
-
   let leftToRight = new Array(nums.length);
   leftToRight[0] = 1;
 
@@ -12,17 +10,12 @@ var productExceptSelf = function (nums) {
     leftToRight[i] = nums[i - 1] * leftToRight[i - 1];
   }
 
-  let rightToLeft = new Array(nums.length);
-  rightToLeft[nums.length - 1] = 1;
-  for (let i = nums.length - 2; i >= 0; i--) {
-    rightToLeft[i] = rightToLeft[i + 1] * nums[i + 1];
+  for (let i = nums.length - 2, rightSum = 1; i >= 0; i--) {
+    rightSum *= nums[i + 1];
+    leftToRight[i] = leftToRight[i] * rightSum;
   }
 
-  let res = new Array(nums.length);
-  for (let i = 0; i < nums.length; i++) {
-    res[i] = leftToRight[i] * rightToLeft[i];
-  }
-  return res;
+  return leftToRight;
 };
 
 // [2,1]
