@@ -9,15 +9,21 @@ const minSum = (nums, k) => {
   for (let i = 0; i < k; i++) {
     const val = Math.ceil(nums.pop() / 2);
 
-    let insertIndex = nums.length;
-    for (let j = 0; j < nums.length; j++) {
-      if (val < nums[j]) {
-        insertIndex = j;
+    let left = 0;
+    let right = nums.length - 1;
+    while (left < right) {
+      const mid = (left + right) >> 1;
+      if (nums[mid] > val) {
+        right = mid;
+      } else if (nums[mid] < val) {
+        left = mid + 1;
+      } else {
+        left = mid;
         break;
       }
     }
 
-    nums.splice(insertIndex, 0, val);
+    nums.splice(left, 0, val);
   }
 
   return nums.reduce((x, y) => x + y);
