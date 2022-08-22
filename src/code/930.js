@@ -4,28 +4,24 @@
  * @return {number}
  */
 var numSubarraysWithSum = function (nums, goal) {
-  let right = 0;
+  const map = new Map();
+  map.set(0, 1);
 
   let res = 0;
-  let sum1 = 0;
-  let left1 = 0;
-  let sum2 = 0;
-  let left2 = 0;
-  while (right < nums.length) {
-    sum1 += nums[right];
-    while (left1 <= right && sum1 > goal) {
-      sum1 -= nums[left1];
-      left1 += 1;
+  let sum = 0;
+  for (let i = 0; i < nums.length; i++) {
+    sum += nums[i];
+
+    const diff = sum - goal;
+    if (map.has(diff)) {
+      res += map.get(diff);
     }
 
-    sum2 += nums[right];
-    while (left2 <= right && sum2 >= goal) {
-      sum2 -= nums[left2];
-      left2 += 1;
+    if (map.has(sum)) {
+      map.set(sum, map.get(sum) + 1);
+    } else {
+      map.set(sum, 1);
     }
-
-    right += 1;
-    res += left2 - left1;
   }
   return res;
 };
