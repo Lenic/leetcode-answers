@@ -1,20 +1,27 @@
 import Heap from './heap';
+
 /**
  * @param {number[]} nums
  * @param {number} k
  * @return {number}
  */
 var findKthLargest = function (nums, k) {
-  const { down, setSize } = new Heap(nums, nums.length, (x, y) => y - x);
+  const list = [];
+  const { down, setSize, up } = new Heap(list, list.length, (x, y) => x - y);
 
-  const max = k - 1;
-  for (let i = 0; i < max; i++) {
-    nums[0] = nums.pop();
-    setSize(nums.length);
-    down(0);
+  for (let i = 0; i < nums.length; i++) {
+    if (list.length < k) {
+      const last = list.length;
+      list.push(nums[i]);
+      setSize(list.length);
+      up(last);
+    } else if (list[0] < nums[i]) {
+      list[0] = nums[i];
+      down(0);
+    }
   }
 
-  return nums[0];
+  return list[0];
 };
 
 // 5
