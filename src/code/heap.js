@@ -1,41 +1,44 @@
 /**
  * @template T
- * @param {T[]} list
- * @param {number} length
- * @param {(x: T, y: T) => number} comparer
- * @return {Heap}
  */
 class Heap {
-  constructor(list, length, comparer) {
+  /**
+   * @param {T[]} list
+   * @param {(x: T, y: T) => number} comparer
+   * @param {number=} length - The list element's count. If you want to discard some tail data, set this parameter; otherwise, please ignore.
+   * @return {Heap}
+   */
+  constructor(list, comparer, length) {
     this.list = list;
     this.comparer = comparer;
-    this.length = length;
 
     this.up = this.up.bind(this);
     this.down = this.down.bind(this);
-    this.setSize = this.setSize.bind(this);
 
-    for (let i = (length - 2) >> 1; i >= 0; i--) {
-      this.down(i);
+    const n = length || list.length;
+    for (let i = (n - 2) >> 1; i >= 0; i--) {
+      this.down(i, n);
     }
   }
   /**
    * @param {number} index
+   * @param {number=} length - The array element's count. If you want to discard some tail data, set this parameter; otherwise, please ignore.
    */
-  down(index) {
-    const { list, comparer, length } = this;
+  down(index, length) {
+    const { list, comparer } = this;
+    const n = length !== undefined ? length : list.length;
 
     const left = index * 2 + 1;
     const right = left + 1;
 
     let targetIndex = index;
-    if (left < length && comparer(list[targetIndex], list[left]) > 0) targetIndex = left;
-    if (right < length && comparer(list[targetIndex], list[right]) > 0) targetIndex = right;
+    if (left < n && comparer(list[targetIndex], list[left]) > 0) targetIndex = left;
+    if (right < n && comparer(list[targetIndex], list[right]) > 0) targetIndex = right;
 
     if (targetIndex === index) return;
 
     [list[targetIndex], list[index]] = [list[index], list[targetIndex]];
-    this.down(targetIndex);
+    this.down(targetIndex, length);
   }
   /**
    * @param {number} index
@@ -51,12 +54,6 @@ class Heap {
     }
 
     this.up(parentIndex);
-  }
-  /**
-   * @param {number} n
-   */
-  setSize(n) {
-    this.length = n;
   }
 }
 
