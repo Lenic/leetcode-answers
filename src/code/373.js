@@ -7,26 +7,53 @@ import Heap from './heap';
  * @return {number[][]}
  */
 var kSmallestPairs = function (nums1, nums2, k) {
-  const h1 = new Heap(nums1, nums1.length, (x, y) => x - y);
-  const h2 = new Heap(nums2, nums2.length, (x, y) => x - y);
-
-  let i1 = 0;
-  let i2 = 0;
-
-  const res = new Array(k);
-
-  let n1 = nums1[i1];
-  let n2 = nums2[i2];
-  res.push([n1, n2]);
-
-  for (let i = 1; i < k; i++) {
-    h1[0] = nums1.pop();
-    h1.setSize(nums1.length);
-    h1.down(0);
-
-    const n1next = h1[]
+  /**
+   * @type {number[][]}
+   */
+  const pairs = [];
+  const min = Math.min(nums1.length, k);
+  for (let i = 0; i < min; i++) {
+    pairs.push([i, 0]);
   }
+
+  /**
+   * @type {number[][]}
+   */
+  const res = [];
+  const { down } = new Heap(pairs, (x, y) => {
+    const value = nums1[x[0]] + nums2[x[1]] - nums1[y[0]] - nums2[y[1]];
+    return value >= 0 ? 1 : -1;
+  });
+  for (let i = 0; i < k; i++) {
+    const [i1, i2] = pairs[0];
+    res.push([nums1[i1], nums2[i2]]);
+
+    if (i2 < nums2.length - 1) {
+      pairs[0] = [i1, i2 + 1];
+    } else {
+      const last = pairs.pop();
+      if (pairs.length) {
+        pairs[0] = last;
+      } else {
+        break;
+      }
+    }
+    down(0);
+  }
+  return res;
 };
+
+// [[101,2],[101,2],[102,2],[102,2],[101,3]]
+console.log(kSmallestPairs([101, 101, 102, 102, 103, 1003], [2, 3], 5));
+
+// [[1,1],[1,1],[2,1],[1,2],[1,2],[2,2],[1,3],[1,3],[2,3]]
+console.log(kSmallestPairs([1, 1, 2], [1, 2, 3], 10));
+
+// [1, 3], [2, 3]
+console.log(kSmallestPairs([1, 2], [3], 3));
 
 // [1, 2], [1, 4], [1, 6];
 console.log(kSmallestPairs([1, 7, 11], [2, 4, 6], 3));
+
+// [1, 2], [2, 2], [1, 4];
+console.log(kSmallestPairs([1, 2, 7, 11], [2, 4, 6], 3));
