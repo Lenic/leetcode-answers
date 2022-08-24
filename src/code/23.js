@@ -15,7 +15,7 @@ var mergeKLists = function (lists) {
   const head = new ListNode(0);
   let node = head;
 
-  const { down, setSize } = new Heap(lists, lists.length, (x, y) => {
+  const { down } = new Heap(lists, (x, y) => {
     if (x === null) {
       return -1;
     } else if (y === null) {
@@ -30,7 +30,6 @@ var mergeKLists = function (lists) {
     if (!item) {
       if (lists.length > 1) {
         lists[0] = lists.pop();
-        setSize(lists.length);
         down(0);
         continue;
       }
@@ -44,7 +43,6 @@ var mergeKLists = function (lists) {
       lists[0] = lists[0].next;
     } else if (lists.length > 1) {
       lists[0] = lists.pop();
-      setSize(lists.length);
     } else {
       break;
     }

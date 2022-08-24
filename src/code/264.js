@@ -6,7 +6,7 @@ import Heap from './heap';
  */
 var nthUglyNumber = function (n) {
   const list = [1];
-  const { down, setSize, up } = new Heap(list, 1, (x, y) => x - y);
+  const { down, up } = new Heap(list, (x, y) => x - y);
 
   const max = n - 1;
   const set = new Set();
@@ -21,7 +21,6 @@ var nthUglyNumber = function (n) {
         set.add(item);
         if (replaced) {
           list.push(item);
-          setSize(list.length);
           up(list.length - 1);
         } else {
           list[0] = item;
@@ -32,7 +31,6 @@ var nthUglyNumber = function (n) {
     }
     if (!replaced) {
       list[0] = list.pop();
-      setSize(list.length);
       down(0);
     }
   }
