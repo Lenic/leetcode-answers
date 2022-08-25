@@ -14,6 +14,7 @@ class PriorityQueue {
     this.list = [];
     this.heap = new Heap(this.list, comparer);
 
+    this.size = this.size.bind(this);
     this.peek = this.peek.bind(this);
     this.poll = this.poll.bind(this);
     this.offer = this.offer.bind(this);
@@ -24,6 +25,13 @@ class PriorityQueue {
    */
   isEmpty() {
     return !this.list.length;
+  }
+
+  /**
+   * @returns {number}
+   */
+  size() {
+    return this.list.length;
   }
 
   /**
