@@ -21,7 +21,8 @@ const App = () => {
       originalLog.apply(console, args);
     };
 
-    import('./code');
+    // import('./code');
+    import('./taptap');
     // import('./brix');
     // import('./toptal');
     // import('./booking');
