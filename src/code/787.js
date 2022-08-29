@@ -8,20 +8,6 @@
  */
 var findCheapestPrice = function (n, flights, src, dst, k) {
   /**
-   * @type {number[][]}
-   */
-  let graph = new Array(n);
-  for (let i = 0; i < n; i++) {
-    graph[i] = new Array(n);
-    for (let j = 0; j < n; j++) {
-      graph[i][j] = i === j ? 0 : Infinity;
-    }
-  }
-  for (let [source, destination, price] of flights) {
-    graph[source][destination] = price;
-  }
-
-  /**
    * @type {number[]}
    */
   const dist = new Array(n).fill(Infinity);
@@ -30,19 +16,10 @@ var findCheapestPrice = function (n, flights, src, dst, k) {
   for (let limit = 0; limit <= k; limit++) {
     const cloned = [...dist];
 
-    for (let i = 0; i < n; i++) {
-      let unchanged = true;
-
-      for (let j = 0; j < n; j++) {
-        const nextPrice = cloned[i] + graph[i][j];
-        if (dist[j] < nextPrice) {
-          unchanged = false;
-          dist[j] = nextPrice;
-        }
-      }
-
-      if (unchanged) {
-        break;
+    for (let [s, t, p] of flights) {
+      const nextPrice = cloned[s] + p;
+      if (dist[t] > nextPrice) {
+        dist[t] = nextPrice;
       }
     }
   }
