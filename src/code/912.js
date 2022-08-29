@@ -1,20 +1,41 @@
-import Heap from './heap';
-
 /**
  * @param {number[]} nums
  * @return {number[]}
  */
 var sortArray = function (nums) {
   /**
-   * @type {Heap<number>}
+   * @param {number} left
+   * @param {number} right
    */
-  const { down } = new Heap(nums, (x, y) => y - x);
+  const sort = (left, right) => {
+    if (left >= right) return;
 
-  for (let i = nums.length - 1; i > 0; i--) {
-    [nums[i], nums[0]] = [nums[0], nums[i]];
-    down(0, i);
-  }
+    const random = Math.floor(Math.random() * (right - left)) + left;
+    const pivot = nums[random];
+    [nums[left], nums[random]] = [nums[random], nums[left]];
 
+    let i = left;
+    let j = right;
+    while (i < j) {
+      while (i < j && nums[j] > pivot) j -= 1;
+      if (i < j) {
+        nums[i] = nums[j];
+        i += 1;
+      }
+
+      while (i < j && nums[i] <= pivot) i += 1;
+      if (i < j) {
+        nums[j] = nums[i];
+        j -= 1;
+      }
+    }
+    nums[i] = pivot;
+
+    sort(left, i - 1);
+    sort(i + 1, right);
+  };
+
+  sort(0, nums.length - 1);
   return nums;
 };
 
