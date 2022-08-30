@@ -1,33 +1,39 @@
-import PriorityQueue from './priority-queue';
-
 /**
  * @param {number[][]} trips
  * @param {number} capacity
  * @return {boolean}
  */
 var carPooling = function (trips, capacity) {
-  trips.sort((x, y) => x[1] - y[1]);
+  const list = new Array(1001).fill(0);
 
-  /**
-   * @type {PriorityQueue<number[]>}
-   */
-  const pq = new PriorityQueue((x, y) => x[2] - y[2]);
+  for (let [count, from, to] of trips) {
+    list[from] += count;
 
-  let rest = capacity;
-  for (let trip of trips) {
-    while (!pq.isEmpty() && pq.peek()[2] <= trip[1]) {
-      const item = pq.poll();
-      rest += item[0];
+    if (to < list.length) {
+      list[to] -= count;
     }
-
-    pq.offer(trip);
-    rest -= trip[0];
-
-    if (rest < 0) return false;
   }
 
+  let previous = list[0];
+  for (let i = 1; i < list.length; i++) {
+    if (previous > capacity) {
+      return false;
+    }
+    previous = previous + list[i];
+  }
   return true;
 };
+
+// false
+console.log(
+  carPooling(
+    [
+      [9, 0, 1],
+      [3, 3, 7],
+    ],
+    4
+  )
+);
 
 // false
 console.log(
