@@ -8,25 +8,23 @@ import PriorityQueue from './priority-queue';
  */
 var networkDelayTime = function (times, n, k) {
   /**
-   * @type {Map<number, number>}
+   * @type {number[]}
    */
-  const nodeTimes = new Map();
-  for (let i = 0; i < n; i++) {
-    nodeTimes.set(i + 1, Infinity);
-  }
+  const dist = new Array(n).fill(Infinity);
+  dist[k - 1] = 0;
 
   /**
-   * @type {Map<number, Map<number, number>>}
+   * @type {Map<number, number[][]>}
    */
   const map = new Map();
   for (let i = 0; i < times.length; i++) {
     const [source, target, time] = times[i];
 
     if (!map.has(source)) {
-      map.set(source, new Map());
+      map.set(source, []);
     }
 
-    map.get(source).set(target, time);
+    map.get(source).push([target, time]);
   }
 
   /**
@@ -35,31 +33,26 @@ var networkDelayTime = function (times, n, k) {
    * The small time is before; if the time is equal, then the small node is before.
    */
   const pq = new PriorityQueue((x, y) => (x.time === y.time ? x.node - y.node : x.time - y.time));
-
-  nodeTimes.set(k, 0);
   pq.offer({ node: k, time: 0 });
 
   while (!pq.isEmpty()) {
     const item = pq.poll();
 
-    if (nodeTimes.get(item.node) < item.time) continue;
+    if (dist[item.node - 1] < item.time) continue;
 
     const targets = map.get(item.node);
-    if (targets && targets.size) {
-      const inner = targets.entries();
-      for (let [key, value] of inner) {
-        const nextTime = value + item.time;
-        if (nextTime < nodeTimes.get(key)) {
-          nodeTimes.set(key, nextTime);
-          pq.offer({ node: key, time: nextTime });
+    if (targets && targets.length) {
+      for (let [node, time] of targets) {
+        const nextTime = time + item.time;
+        if (nextTime < dist[node - 1]) {
+          dist[node - 1] = nextTime;
+          pq.offer({ node, time: nextTime });
         }
       }
     }
   }
 
-  let res = -1;
-  nodeTimes.forEach((value) => (res = Math.max(res, value)));
-
+  let res = dist.reduce((x, y) => Math.max(x, y));
   return res === Infinity ? -1 : res;
 };
 
