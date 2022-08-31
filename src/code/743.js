@@ -1,5 +1,3 @@
-import PriorityQueue from './priority-queue';
-
 /**
  * @param {number[][]} times
  * @param {number} n
@@ -10,50 +8,31 @@ var networkDelayTime = function (times, n, k) {
   /**
    * @type {number[]}
    */
-  const dist = new Array(n).fill(Infinity);
-  dist[k - 1] = 0;
+  const dist = new Array(n + 1).fill(Infinity);
+  dist[k] = 0;
 
-  /**
-   * @type {Map<number, number[][]>}
-   */
-  const map = new Map();
-  for (let i = 0; i < times.length; i++) {
-    const [source, target, time] = times[i];
+  let unchanged = true;
+  while (unchanged) {
+    for (let [from, to, time] of times) {
+      if (dist[from] === Infinity) continue;
 
-    if (!map.has(source)) {
-      map.set(source, []);
-    }
-
-    map.get(source).push([target, time]);
-  }
-
-  /**
-   * @type PriorityQueue<{node:number,time:number}>
-   *
-   * The small time is before; if the time is equal, then the small node is before.
-   */
-  const pq = new PriorityQueue((x, y) => (x.time === y.time ? x.node - y.node : x.time - y.time));
-  pq.offer({ node: k, time: 0 });
-
-  while (!pq.isEmpty()) {
-    const item = pq.poll();
-
-    if (dist[item.node - 1] < item.time) continue;
-
-    const targets = map.get(item.node);
-    if (targets && targets.length) {
-      for (let [node, time] of targets) {
-        const nextTime = time + item.time;
-        if (nextTime < dist[node - 1]) {
-          dist[node - 1] = nextTime;
-          pq.offer({ node, time: nextTime });
-        }
+      const nextTime = dist[from] + time;
+      if (nextTime < dist[to]) {
+        unchanged = false;
+        dist[to] = nextTime;
       }
     }
+    if (unchanged) break;
+    unchanged = true;
   }
 
-  let res = dist.reduce((x, y) => Math.max(x, y));
-  return res === Infinity ? -1 : res;
+  let res = 0;
+  for (let i = 1; i < dist.length; i++) {
+    if (dist[i] === Infinity) return -1;
+
+    res = Math.max(res, dist[i]);
+  }
+  return res;
 };
 
 // 3
