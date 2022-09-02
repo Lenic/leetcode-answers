@@ -23,12 +23,6 @@ var combinationSum2 = function (candidates, target) {
     if (index >= candidates.length) return;
 
     for (let i = index; i < candidates.length; i++) {
-      if (i > 0 && !ans.length) {
-        if (candidates[i] === candidates[i - 1]) {
-          continue;
-        }
-      }
-
       const nextSum = prefixSum + candidates[i];
       if (nextSum > target) {
         break;
@@ -58,3 +52,6 @@ console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
 
 // [[1, 2, 2], [5]];
 console.log(combinationSum2([2, 5, 2, 1, 2], 5));
+
+// [[1, 1, 1, 1], [1, 1, 2], [2, 2]];
+console.log(combinationSum2([1, 1, 1, 1, 2, 2, 2], 4));
