@@ -9,27 +9,28 @@ var permute = function (nums) {
   const res = [];
 
   /**
-   * @param {number[]} ans
-   * @param {Set<number>} list
+   * @param {number} left
    */
-  const traversal = (ans, list) => {
-    if (ans.length === nums.length) {
-      res.push([...ans]);
+  const traversal = (left) => {
+    if (left === nums.length) {
+      res.push([...nums]);
       return;
     }
 
-    for (let item of nums) {
-      if (list.has(item)) continue;
+    for (let i = left; i < nums.length; i++) {
+      if (i !== left) {
+        [nums[i], nums[left]] = [nums[left], nums[i]];
+      }
 
-      ans.push(item);
-      list.add(item);
-      traversal(ans, list);
-      ans.pop();
-      list.delete(item);
+      traversal(left + 1);
+
+      if (i !== left) {
+        [nums[i], nums[left]] = [nums[left], nums[i]];
+      }
     }
   };
 
-  traversal([], new Set());
+  traversal(0);
   return res;
 };
 
