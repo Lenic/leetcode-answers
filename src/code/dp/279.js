@@ -10,38 +10,25 @@ var numSquares = function (n) {
   /**
    * @type {number[]}
    */
-  const keys = [];
+  const values = new Array(n).fill(Infinity);
   for (let i = 0; i < integer; i++) {
-    keys.push(Math.pow(i + 1, 2));
+    values[Math.pow(i + 1, 2) - 1] = 1;
   }
 
-  /**
-   * @type {number}
-   */
-  let res = Infinity;
+  for (let i = 1; i <= n; i++) {
+    if (values[i] !== Infinity) continue;
 
-  /**
-   * @param {number} ans
-   * @param {number} rest
-   */
-  const traversal = (ans, rest) => {
-    if (rest === 0) {
-      res = Math.min(res, ans);
-      return;
+    for (let j = i >> 1; j >= 0; j--) {
+      const count = values[j] + values[i - j - 1];
+      values[i] = Math.min(values[i], count);
     }
+  }
 
-    for (let key of keys) {
-      if (key > rest) break;
-
-      ans += 1;
-      traversal(ans, rest - key);
-      ans -= 1;
-    }
-  };
-
-  traversal(0, n);
-  return res;
+  return values[values.length - 1];
 };
 
-// res(4 + 4 + 4)
+// 3 (4 + 4 + 4)
 console.log(numSquares(12));
+
+// 4
+console.log(numSquares(55));
