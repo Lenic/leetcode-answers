@@ -22,7 +22,7 @@ var kClosest = function (points, k) {
    * @return {number}
    */
   const partition = (left, right) => {
-    const mid = left + Math.round(Math.random() * (right - left));
+    const mid = left + ((right - left) >> 1);
     if (mid !== left) {
       [points[mid], points[left]] = [points[left], points[mid]];
     }
@@ -32,7 +32,7 @@ var kClosest = function (points, k) {
     const pivot = points[left];
 
     while (i < j) {
-      while (i < j && getDistance(points[j]) >= getDistance(pivot)) j -= 1;
+      while (i < j && getDistance(points[j]) > getDistance(pivot)) j -= 1;
       if (i < j) {
         points[i] = points[j];
         i += 1;
@@ -74,6 +74,20 @@ var kClosest = function (points, k) {
   }
   return res;
 };
+
+console.log(
+  kClosest(
+    [
+      [2, 2],
+      [2, 2],
+      [2, 2],
+      [2, 2],
+      [2, 2],
+      [2, 2],
+    ],
+    5
+  )
+);
 
 console.log(
   kClosest(
