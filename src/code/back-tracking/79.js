@@ -4,7 +4,55 @@
  * @return {boolean}
  */
 var exist = function (board, word) {
-  debugger;
+  /**
+   * @type {boolean[][]}
+   */
+  const visited = new Array(board.length);
+  for (let i = 0; i < board.length; i++) {
+    visited[i] = new Array(board[i].length).fill(false);
+  }
+
+  /**
+   * @param {number} i
+   * @param {number} j
+   * @param {number} index
+   */
+  const traversal = (i, j, index) => {
+    if (index >= word.length) return true;
+    if (i < 0 || i >= board.length) return false;
+    if (j < 0 || j >= board[i].length) return false;
+    if (visited[i][j]) return false;
+
+    if (board[i][j] === word[index]) {
+      index += 1;
+      visited[i][j] = true;
+
+      try {
+        let res = traversal(i - 1, j, index);
+        if (res) return true;
+
+        res = traversal(i + 1, j, index);
+        if (res) return true;
+
+        res = traversal(i, j - 1, index);
+        if (res) return true;
+
+        res = traversal(i, j + 1, index);
+        if (res) return true;
+      } finally {
+        visited[i][j] = false;
+      }
+    }
+
+    return false;
+  };
+
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      if (traversal(i, j, 0)) return true;
+    }
+  }
+  return false;
 };
 
 // true
